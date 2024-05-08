@@ -8,7 +8,7 @@ interface TableHeaderProps {
   onClick: () => void;
 }
 
-const DashboardTableHeader = ({
+const DashboardSectionHeader = ({
   title,
   buttonText,
   onClick,
@@ -17,7 +17,7 @@ const DashboardTableHeader = ({
     <div className="my-2 flex flex-row items-center justify-between">
       {title}
       <Button
-        className="data-[active]:bg-kairon-green-active data-[hover]:bg-kairon-green-hover flex flex-row items-center justify-center gap-2 rounded-lg bg-kairon-green p-2 text-sm text-white"
+        className="flex flex-row items-center justify-center gap-2 rounded-lg bg-kairon-green p-2 text-sm text-white data-[active]:bg-kairon-green-active data-[hover]:bg-kairon-green-hover"
         onClick={onClick}
       >
         <AddIcon />
@@ -27,4 +27,4 @@ const DashboardTableHeader = ({
   );
 };
 
-export default DashboardTableHeader;
+export default DashboardSectionHeader;

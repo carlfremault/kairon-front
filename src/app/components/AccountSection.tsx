@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import DashboardTableHeader from "./DashboardTableHeader";
+import DashboardSectionHeader from "./DashboardSectionHeader";
 import AccountForm from "../forms/AccountForm";
 import DashboardModal from "./DashboardModal";
 
@@ -10,7 +10,7 @@ const AccountSection = () => {
 
   return (
     <section className="w-full flex-initial md:w-5/12">
-      <DashboardTableHeader
+      <DashboardSectionHeader
         title="Accounts"
         buttonText="add account"
         onClick={() => setShowModal(true)}

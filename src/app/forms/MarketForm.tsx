@@ -1,8 +1,8 @@
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import Select from "react-select";
 import { Field, Fieldset } from "@headlessui/react";
-import FormFeedback from "../components/Form/FormFeedback";
-import FormSubmitButton from "../components/Form/FormSubmitButton";
+import FormFeedback from "../components/form/FormFeedback";
+import FormSubmitButton from "../components/form/FormSubmitButton";
 
 // TODO: replace with API data
 import { accountOptions, marketOptions } from "../dummyData";
