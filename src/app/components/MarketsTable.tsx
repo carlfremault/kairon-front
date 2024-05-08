@@ -17,7 +17,7 @@ const columns = [
   }),
   columnHelper.accessor("account", {
     cell: (info) => info.getValue(),
-    header: () => "Account Name",
+    header: () => "Account",
   }),
 ];
 
