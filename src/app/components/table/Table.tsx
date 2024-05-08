@@ -13,7 +13,7 @@ interface TableProps<TData> {
   colgroup?: JSX.Element;
 }
 
-const Table = <TData, _>({ data, columns, colgroup }: TableProps<TData>) => {
+const Table = <TData,>({ data, columns, colgroup }: TableProps<TData>) => {
   const table = useReactTable({
     data,
     columns,
