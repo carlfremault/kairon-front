@@ -1,7 +1,20 @@
-export interface ReactSelectOption {
+export type ReactSelectOption = {
   readonly label: string;
   readonly value: string;
-}
+};
+
+export type AccountsTableData = {
+  id: number;
+  name: string;
+  exchange: string;
+};
+
+export type MarketsTableData = {
+  id: number;
+  market: string;
+  price: string;
+  account: string;
+};
 
 export const exchangeOptions: readonly ReactSelectOption[] = [
   {
@@ -43,5 +56,27 @@ export const accountOptions: readonly ReactSelectOption[] = [
   {
     label: "Account 3",
     value: "Account 3",
+  },
+];
+
+export const accountsTableData: AccountsTableData[] = [
+  {
+    id: 1,
+    name: "Binance Main",
+    exchange: "Binance",
+  },
+  {
+    id: 2,
+    name: "Bybit fund",
+    exchange: "Bybit",
+  },
+];
+
+export const marketsTableData: MarketsTableData[] = [
+  {
+    id: 1,
+    market: "ATOM/USDT",
+    price: "11.05",
+    account: "Binance Main",
   },
 ];
