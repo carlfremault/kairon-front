@@ -21,7 +21,7 @@ const AccountSection = () => {
         setShowModal={setShowModal}
         dialogTitle="Add an account"
       >
-        <AccountForm />
+        <AccountForm setShowModal={setShowModal} />
       </DashboardModal>
     </section>
   );

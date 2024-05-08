@@ -21,7 +21,7 @@ const MarketSection = () => {
         setShowModal={setShowModal}
         dialogTitle="Add a market"
       >
-        <MarketForm />
+        <MarketForm setShowModal={setShowModal} />
       </DashboardModal>
     </section>
   );
