@@ -26,6 +26,7 @@ const AccountForm = ({ setShowModal }: AccountFormProps) => {
     register,
   } = useForm<AccountFormInputs>();
   const onSubmit: SubmitHandler<AccountFormInputs> = (data) => {
+    // TODO: implement api call
     console.log(data);
     setShowModal(false);
   };

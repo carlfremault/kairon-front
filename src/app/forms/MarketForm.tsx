@@ -23,6 +23,7 @@ const MarketForm = ({ setShowModal }: MarketFormProps) => {
     handleSubmit,
   } = useForm<MarketFormInputs>();
   const onSubmit: SubmitHandler<MarketFormInputs> = (data) => {
+    // TODO: implement api call
     console.log(data);
     setShowModal(false);
   };
