@@ -1,4 +1,3 @@
-import React from "react";
 import { Button } from "@headlessui/react";
 import AddIcon from "../../svg/AddIcon";
 

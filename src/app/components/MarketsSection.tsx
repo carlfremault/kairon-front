@@ -1,30 +1,31 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import DashboardSectionHeader from "./utils/DashboardSectionHeader";
-import AccountForm from "../forms/AccountForm";
+import MarketForm from "../forms/MarketForm";
 import DashboardModal from "./utils/DashboardModal";
+import MarketsTable from "./MarketsTable";
 
-const AccountSection = () => {
+const MarketsSection = () => {
   const [showModal, setShowModal] = useState(false);
 
   return (
-    <section className="w-full flex-initial md:w-5/12">
+    <section className="w-full flex-initial md:w-7/12">
       <DashboardSectionHeader
-        title="Accounts"
-        buttonText="add account"
+        title="Markets"
+        buttonText="add market"
         onClick={() => setShowModal(true)}
       />
-      <div className="border border-sky-500">Here comes a table</div>
+      <MarketsTable />
       <DashboardModal
         showModal={showModal}
         setShowModal={setShowModal}
-        dialogTitle="Add an account"
+        dialogTitle="Add a market"
       >
-        <AccountForm setShowModal={setShowModal} />
+        <MarketForm setShowModal={setShowModal} />
       </DashboardModal>
     </section>
   );
 };
 
-export default AccountSection;
+export default MarketsSection;
