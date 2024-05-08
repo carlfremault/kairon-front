@@ -1,13 +1,11 @@
-"use client";
-
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import Select from "react-select";
 import { Field, Fieldset, Input } from "@headlessui/react";
 import FormFeedback from "../components/Form/FormFeedback";
+import FormSubmitButton from "../components/Form/FormSubmitButton";
 
 // TODO: replace with API data
 import { exchangeOptions } from "../dummyData";
-import FormSubmitButton from "../components/Form/FormSubmitButton";
 
 interface AccountFormProps {
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
