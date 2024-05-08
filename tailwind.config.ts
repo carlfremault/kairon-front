@@ -12,6 +12,8 @@ const config: Config = {
         "light-grey": "#d9d9d9",
         "dark-grey": "#8f8f8f",
         "kairon-green": "#3AD58A",
+        "kairon-green-hover": "#27B570",
+        "kairon-green-active": "#3AD53C",
       },
       fontFamily: {
         sans: ['"Inter"'],

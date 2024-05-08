@@ -1,9 +1,11 @@
-import Image from "next/image";
+import AccountSection from "./components/AccountSection";
+import MarketSection from "./components/MarketSection";
 
-export default function Home() {
+export default async function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      Hello world
+    <main className="flex min-h-full flex-col items-center justify-between gap-14 p-12 md:flex-row md:p-24 lg:gap-28">
+      <AccountSection />
+      <MarketSection />
     </main>
   );
 }
