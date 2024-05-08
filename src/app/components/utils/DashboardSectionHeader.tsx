@@ -1,6 +1,6 @@
 import React from "react";
 import { Button } from "@headlessui/react";
-import AddIcon from "../svg/AddIcon";
+import AddIcon from "../../svg/AddIcon";
 
 interface TableHeaderProps {
   title: string;

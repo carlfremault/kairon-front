@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import DashboardSectionHeader from "./DashboardSectionHeader";
+import DashboardSectionHeader from "./utils/DashboardSectionHeader";
 import AccountForm from "../forms/AccountForm";
-import DashboardModal from "./DashboardModal";
+import DashboardModal from "./utils/DashboardModal";
 
 const AccountSection = () => {
   const [showModal, setShowModal] = useState(false);
