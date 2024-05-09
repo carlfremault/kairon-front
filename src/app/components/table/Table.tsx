@@ -48,7 +48,7 @@ const Table = <TData,>({ data, columns, colgroup }: TableProps<TData>) => {
   const renderedRows = [...rows, ...emptyRows];
 
   return (
-    <table className="w-full table-fixed border border-black">
+    <table className="w-full table-auto border border-black">
       {colgroup && <colgroup>{colgroup}</colgroup>}
       <thead className="bg-dark-grey text-white">
         {table.getHeaderGroups().map((headerGroup) => (

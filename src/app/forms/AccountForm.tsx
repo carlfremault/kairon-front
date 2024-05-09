@@ -24,7 +24,9 @@ const AccountForm = ({ setShowModal }: AccountFormProps) => {
     handleSubmit,
     register,
   } = useForm<AccountFormInputs>();
+
   const { exchangeOptions, isPending } = useExchangeOptions();
+
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: (data: AccountFormInputs) => {
