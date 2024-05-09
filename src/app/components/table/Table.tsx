@@ -22,7 +22,7 @@ const Table = <TData,>({ data, columns, colgroup }: TableProps<TData>) => {
 
   const rows = table.getRowModel().rows.map((row) => (
     <tr key={row.id} className="h-10 even:bg-light-grey">
-      {row.getVisibleCells().map((cell, i) => (
+      {row.getVisibleCells().map((cell) => (
         <td key={cell.id} className="p-2 text-lg leading-4">
           {flexRender(cell.column.columnDef.cell, cell.getContext())}
         </td>
