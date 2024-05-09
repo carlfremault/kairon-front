@@ -1,4 +1,5 @@
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Select from "react-select";
 import { Field, Fieldset, Input } from "@headlessui/react";
 import FormFeedback from "../components/form/FormFeedback";
@@ -25,10 +26,31 @@ const AccountForm = ({ setShowModal }: AccountFormProps) => {
     handleSubmit,
     register,
   } = useForm<AccountFormInputs>();
-  const onSubmit: SubmitHandler<AccountFormInputs> = (data) => {
-    // TODO: implement api call
-    console.log(data);
-    setShowModal(false);
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: (data: AccountFormInputs) => {
+      const body = {
+        account_name: data.accountName,
+        exchange_name: data.exchange.value,
+        private_key: data.privateKey,
+        public_key: data.publicKey,
+      };
+
+      return fetch(process.env.NEXT_PUBLIC_KAIRON_API_URL + "/accounts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["accounts"] });
+      setShowModal(false);
+    },
+  });
+
+  const onSubmit: SubmitHandler<AccountFormInputs> = (data, event) => {
+    event?.preventDefault();
+    mutation.mutate(data);
   };
 
   return (
