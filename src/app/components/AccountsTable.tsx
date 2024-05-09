@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { createColumnHelper } from "@tanstack/react-table";
 import Table from "./table/Table";
+import { capitalizeFirstLetter } from "../utils/capitalizeFirstLetter";
 
 type AccountsTableData = {
   id: number;
@@ -19,7 +20,7 @@ const columns = [
     header: () => "Name",
   }),
   columnHelper.accessor("exchange_name", {
-    cell: (info) => info.getValue(),
+    cell: (info) => capitalizeFirstLetter(info.getValue()),
     header: () => "Exchange",
   }),
 ];
@@ -32,7 +33,7 @@ const colgroup = (
 );
 
 const AccountsTable = () => {
-  const { isPending, error, data, isFetching } = useQuery({
+  const { isPending, error, data } = useQuery({
     queryKey: ["accounts"],
     queryFn: () =>
       fetch(process.env.NEXT_PUBLIC_KAIRON_API_URL + "/accounts").then((res) =>

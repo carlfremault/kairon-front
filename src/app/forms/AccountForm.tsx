@@ -4,9 +4,7 @@ import Select from "react-select";
 import { Field, Fieldset, Input } from "@headlessui/react";
 import FormFeedback from "../components/form/FormFeedback";
 import FormSubmitButton from "../components/form/FormSubmitButton";
-
-// TODO: replace with API data
-import { exchangeOptions } from "../dummyData";
+import useExchangeOptions from "../hooks/useExchangeOptions";
 
 interface AccountFormProps {
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -26,6 +24,7 @@ const AccountForm = ({ setShowModal }: AccountFormProps) => {
     handleSubmit,
     register,
   } = useForm<AccountFormInputs>();
+  const { exchangeOptions, isPending } = useExchangeOptions();
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: (data: AccountFormInputs) => {
@@ -67,28 +66,33 @@ const AccountForm = ({ setShowModal }: AccountFormProps) => {
           )}
         </Field>
         <Field>
-          <Controller
-            name="exchange"
-            control={control}
-            rules={{ required: true }}
-            render={({ field }) => (
-              <Select
-                options={exchangeOptions}
-                placeholder="pick an exchange ..."
-                unstyled
-                classNames={{
-                  container: () => "border border-dark-grey",
-                  control: () => "bg-light-grey text-black pl-2 ",
-                  placeholder: () => "text-slate-400",
-                  menu: () =>
-                    "bg-light-grey text-black border border-dark-grey space-y-4 absolute left-0",
-                  option: () => "p-2 hover:bg-dark-grey",
-                  indicatorsContainer: () => "bg-dark-grey text-dark-grey w-14",
-                }}
-                {...field}
-              />
-            )}
-          />
+          {isPending ? (
+            <p className="w-full text-center">Loading...</p>
+          ) : (
+            <Controller
+              name="exchange"
+              control={control}
+              rules={{ required: true }}
+              render={({ field }) => (
+                <Select
+                  options={exchangeOptions}
+                  placeholder="pick an exchange ..."
+                  unstyled
+                  classNames={{
+                    container: () => "border border-dark-grey",
+                    control: () => "bg-light-grey text-black pl-2 ",
+                    placeholder: () => "text-slate-400",
+                    menu: () =>
+                      "bg-light-grey text-black border border-dark-grey space-y-4 absolute left-0",
+                    option: () => "p-2 hover:bg-dark-grey",
+                    indicatorsContainer: () =>
+                      "bg-dark-grey text-dark-grey w-14",
+                  }}
+                  {...field}
+                />
+              )}
+            />
+          )}
           {errors.exchange && (
             <FormFeedback>Exchange is required!</FormFeedback>
           )}
@@ -114,7 +118,7 @@ const AccountForm = ({ setShowModal }: AccountFormProps) => {
           )}
         </Field>
       </Fieldset>
-      <FormSubmitButton />
+      <FormSubmitButton disabled={isPending} />
     </form>
   );
 };
