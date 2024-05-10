@@ -86,6 +86,7 @@ const AccountForm = ({ setShowModal }: AccountFormProps) => {
                     placeholder: () => "text-slate-400",
                     menu: () =>
                       "bg-light-grey text-black border border-dark-grey space-y-4 absolute left-0",
+                    noOptionsMessage: () => "py-4",
                     option: () => "p-2 hover:bg-dark-grey",
                     indicatorsContainer: () =>
                       "bg-dark-grey text-dark-grey w-14",

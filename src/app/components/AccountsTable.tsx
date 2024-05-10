@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { createColumnHelper } from "@tanstack/react-table";
 import Table from "./table/Table";
 import { capitalizeFirstLetter } from "../utils/capitalizeFirstLetter";
+import DashboardStatusMessage from "./utils/DashboardStatusMessage";
 
 type AccountsTableData = {
   id: number;
@@ -41,9 +42,14 @@ const AccountsTable = () => {
       ),
   });
 
-  if (isPending) return "Loading...";
+  if (isPending) return <DashboardStatusMessage statusText="Loading..." />;
 
-  if (error) return "An error has occurred: " + error.message;
+  if (error)
+    return (
+      <DashboardStatusMessage
+        statusText={`An error has occurred: ${error.message}`}
+      />
+    );
 
   return <Table data={data} columns={columns} colgroup={colgroup} />;
 };
