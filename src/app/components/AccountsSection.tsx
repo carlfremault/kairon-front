@@ -1,31 +1,23 @@
-"use client";
-
-import { useState } from "react";
+import ClientAccountsSection from "./ClientAccountsSection";
 import AccountsTable from "./AccountsTable";
-import AccountForm from "../forms/AccountForm";
-import DashboardSectionHeader from "./utils/DashboardSectionHeader";
-import DashboardModal from "./utils/DashboardModal";
 
-const AccountsSection = () => {
-  const [showModal, setShowModal] = useState(false);
+const AccountSection = async () => {
+  const fetchAccountsData = async () => {
+    "use server";
+    return fetch(process.env.NEXT_PUBLIC_KAIRON_API_URL + "/accounts").then(
+      (res) => res.json(),
+    );
+  };
+  const initialAccountsData = await fetchAccountsData();
 
   return (
-    <section className="w-full flex-initial md:w-5/12">
-      <DashboardSectionHeader
-        title="Accounts"
-        buttonText="add account"
-        onClick={() => setShowModal(true)}
+    <ClientAccountsSection>
+      <AccountsTable
+        initialData={initialAccountsData}
+        fetchData={fetchAccountsData}
       />
-      <AccountsTable />
-      <DashboardModal
-        showModal={showModal}
-        setShowModal={setShowModal}
-        dialogTitle="Add an account"
-      >
-        <AccountForm setShowModal={setShowModal} />
-      </DashboardModal>
-    </section>
+    </ClientAccountsSection>
   );
 };
 
-export default AccountsSection;
+export default AccountSection;

@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 
 const useMarketOptions = (id?: number) => {
   const { isPending, error, data } = useQuery({
-    queryKey: ["markets", id],
+    queryKey: ["allmarkets", id],
     queryFn: () =>
       fetch(
         process.env.NEXT_PUBLIC_KAIRON_API_URL + "/markets/" + id + "/all",

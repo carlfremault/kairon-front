@@ -1,3 +1,5 @@
+"use client";
+
 import { useQuery } from "@tanstack/react-query";
 import { createColumnHelper } from "@tanstack/react-table";
 import Table from "./table/Table";
@@ -33,16 +35,18 @@ const colgroup = (
   </>
 );
 
-const AccountsTable = () => {
-  const { isPending, error, data } = useQuery({
+const AccountsTable = ({
+  initialData,
+  fetchData,
+}: {
+  initialData: AccountsTableData[];
+  fetchData: () => Promise<AccountsTableData[]>;
+}) => {
+  const { error, data, isFetching } = useQuery({
     queryKey: ["accounts"],
-    queryFn: () =>
-      fetch(process.env.NEXT_PUBLIC_KAIRON_API_URL + "/accounts").then((res) =>
-        res.json(),
-      ),
+    queryFn: () => fetchData(),
+    initialData,
   });
-
-  if (isPending) return <DashboardStatusMessage statusText="Loading..." />;
 
   if (error)
     return (
@@ -51,7 +55,14 @@ const AccountsTable = () => {
       />
     );
 
-  return <Table data={data} columns={columns} colgroup={colgroup} />;
+  return (
+    <Table
+      data={data}
+      columns={columns}
+      colgroup={colgroup}
+      isFetching={isFetching}
+    />
+  );
 };
 
 export default AccountsTable;

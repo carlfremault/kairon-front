@@ -11,9 +11,15 @@ interface TableProps<TData> {
   data: TData[];
   columns: AccessorKeyColumnDef<TData, string>[];
   colgroup?: JSX.Element;
+  isFetching: boolean;
 }
 
-const Table = <TData,>({ data, columns, colgroup }: TableProps<TData>) => {
+const Table = <TData,>({
+  data,
+  columns,
+  colgroup,
+  isFetching,
+}: TableProps<TData>) => {
   const table = useReactTable({
     data,
     columns,
@@ -30,11 +36,23 @@ const Table = <TData,>({ data, columns, colgroup }: TableProps<TData>) => {
     </tr>
   ));
 
+  // Show 'Loading...' in the top row when data is being fetched
+  const loadingRow = isFetching ? (
+    <tr key="loading" className="h-10 even:bg-light-grey">
+      <td
+        colSpan={columns.length}
+        className="p-2 text-center text-lg leading-4"
+      >
+        Loading...
+      </td>
+    </tr>
+  ) : null;
+
   // When necessary, we'll add empty rows to the table to make sure the minimum of rows as specified in ROWS_TO_RENDER is rendered
   let emptyRows: JSX.Element[] = [];
   if (rows.length < ROWS_TO_RENDER) {
     emptyRows = Array.from(
-      { length: ROWS_TO_RENDER - rows.length },
+      { length: ROWS_TO_RENDER - rows.length - (loadingRow ? 1 : 0) },
       (_, index) => (
         <tr key={`empty-${index}`} className="h-10 even:bg-light-grey">
           {columns.map((_, columnIndex) => (
@@ -45,7 +63,7 @@ const Table = <TData,>({ data, columns, colgroup }: TableProps<TData>) => {
     );
   }
 
-  const renderedRows = [...rows, ...emptyRows];
+  const renderedRows = [...rows, loadingRow, ...emptyRows];
 
   return (
     <table className="w-full table-auto border border-black">
