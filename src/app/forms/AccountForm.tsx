@@ -1,8 +1,7 @@
-import { useForm, Controller, SubmitHandler } from "react-hook-form";
-import Select from "react-select";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { Field, Fieldset } from "@headlessui/react";
-import FormFeedback from "../components/form/FormFeedback";
 import FormFieldLoading from "../components/form/FormFieldLoading";
+import FormSelect from "../components/form/FormSelect";
 import FormSubmitButton from "../components/form/FormSubmitButton";
 import FormTextInput from "../components/form/FormTextInput";
 import useExchangeOptions from "../hooks/useExchangeOptions";
@@ -58,6 +57,7 @@ const AccountForm = ({ setShowModal }: AccountFormProps) => {
             register={register}
             name="accountName"
             placeholder="account name"
+            rules={{ required: true, minLength: 1 }}
             errors={errors}
             errorMessage="Account name is required!"
           />
@@ -66,33 +66,15 @@ const AccountForm = ({ setShowModal }: AccountFormProps) => {
           {isPending ? (
             <FormFieldLoading />
           ) : (
-            <Controller
-              name="exchange"
+            <FormSelect
               control={control}
+              name="exchange"
+              placeholder="pick an exchange ..."
+              options={exchangeOptions}
               rules={{ required: true }}
-              render={({ field }) => (
-                <Select
-                  options={exchangeOptions}
-                  placeholder="pick an exchange ..."
-                  unstyled
-                  classNames={{
-                    container: () => "border border-dark-grey",
-                    control: () => "bg-light-grey text-black pl-2 ",
-                    placeholder: () => "text-slate-400",
-                    menu: () =>
-                      "bg-light-grey text-black border border-dark-grey space-y-4 absolute left-0",
-                    noOptionsMessage: () => "py-4",
-                    option: () => "p-2 hover:bg-dark-grey",
-                    indicatorsContainer: () =>
-                      "bg-dark-grey text-dark-grey w-14",
-                  }}
-                  {...field}
-                />
-              )}
+              errors={errors}
+              errorMessage="Exchange is required!"
             />
-          )}
-          {errors.exchange && (
-            <FormFeedback>Exchange is required!</FormFeedback>
           )}
         </Field>
         <Field>
@@ -101,6 +83,7 @@ const AccountForm = ({ setShowModal }: AccountFormProps) => {
             name="privateKey"
             type="password"
             placeholder="private key"
+            rules={{ required: true, minLength: 1 }}
             errors={errors}
             errorMessage="Private key is required!"
           />
@@ -110,6 +93,7 @@ const AccountForm = ({ setShowModal }: AccountFormProps) => {
             register={register}
             name="publicKey"
             placeholder="public key"
+            rules={{ required: true, minLength: 1 }}
             errors={errors}
             errorMessage="Public key is required!"
           />

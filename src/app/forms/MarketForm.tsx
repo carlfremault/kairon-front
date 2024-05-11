@@ -1,8 +1,7 @@
-import { useForm, Controller, SubmitHandler } from "react-hook-form";
-import Select from "react-select";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { Field, Fieldset } from "@headlessui/react";
-import FormFeedback from "../components/form/FormFeedback";
 import FormFieldLoading from "../components/form/FormFieldLoading";
+import FormSelect from "../components/form/FormSelect";
 import FormSubmitButton from "../components/form/FormSubmitButton";
 import useAccountOptions from "../hooks/useAccountOptions";
 import useMarketOptions from "../hooks/useMarketOptions";
@@ -63,68 +62,35 @@ const MarketForm = ({ setShowModal }: MarketFormProps) => {
           {accountOptionsPending ? (
             <FormFieldLoading />
           ) : (
-            <Controller
-              name="account"
+            <FormSelect
               control={control}
+              name="account"
+              placeholder="choose an account ..."
+              options={accountOptions}
               rules={{ required: true }}
-              render={({ field }) => (
-                <Select
-                  options={accountOptions}
-                  placeholder="choose an account ..."
-                  unstyled
-                  classNames={{
-                    container: () => "border border-dark-grey",
-                    control: () => "bg-light-grey text-black pl-2 ",
-                    placeholder: () => "text-slate-400",
-                    menu: () =>
-                      "bg-light-grey text-black border border-dark-grey space-y-4 absolute left-0",
-                    noOptionsMessage: () => "py-4",
-                    option: () => "p-2 hover:bg-dark-grey",
-                    indicatorsContainer: () =>
-                      "bg-dark-grey text-dark-grey w-14",
-                  }}
-                  {...field}
-                />
-              )}
+              errors={errors}
+              errorMessage="Account is required!"
             />
           )}
-          {errors.account && <FormFeedback>Account is required!</FormFeedback>}
         </Field>
         <Field>
           {marketOptionsPending ? (
             <FormFieldLoading />
           ) : (
-            <Controller
-              name="market"
+            <FormSelect
               control={control}
+              name="market"
+              placeholder={
+                !selectedAccount
+                  ? "choose an account first"
+                  : "pick a market ..."
+              }
+              options={marketOptions}
               rules={{ required: true }}
-              render={({ field }) => (
-                <Select
-                  isDisabled={!selectedAccount}
-                  options={marketOptions}
-                  placeholder={
-                    !selectedAccount
-                      ? "choose an account first"
-                      : "pick a market ..."
-                  }
-                  unstyled
-                  classNames={{
-                    container: () => "border border-dark-grey",
-                    control: () => "bg-light-grey text-black pl-2 ",
-                    placeholder: () => "text-slate-400",
-                    menu: () =>
-                      "bg-light-grey text-black border border-dark-grey space-y-4 absolute left-0",
-                    noOptionsMessage: () => "py-4",
-                    option: () => "p-2 hover:bg-dark-grey",
-                    indicatorsContainer: () =>
-                      "bg-dark-grey text-dark-grey w-14",
-                  }}
-                  {...field}
-                />
-              )}
+              errors={errors}
+              errorMessage="Market is required!"
             />
           )}
-          {errors.market && <FormFeedback>Market is required!</FormFeedback>}
         </Field>
       </Fieldset>
       <FormSubmitButton />
