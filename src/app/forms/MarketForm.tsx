@@ -2,6 +2,7 @@ import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import Select from "react-select";
 import { Field, Fieldset } from "@headlessui/react";
 import FormFeedback from "../components/form/FormFeedback";
+import FormFieldLoading from "../components/form/FormFieldLoading";
 import FormSubmitButton from "../components/form/FormSubmitButton";
 import useAccountOptions from "../hooks/useAccountOptions";
 import useMarketOptions from "../hooks/useMarketOptions";
@@ -60,7 +61,7 @@ const MarketForm = ({ setShowModal }: MarketFormProps) => {
       <Fieldset className="mb-6 space-y-6">
         <Field>
           {accountOptionsPending ? (
-            <p className="w-full text-center">Loading...</p>
+            <FormFieldLoading />
           ) : (
             <Controller
               name="account"
@@ -91,7 +92,7 @@ const MarketForm = ({ setShowModal }: MarketFormProps) => {
         </Field>
         <Field>
           {marketOptionsPending ? (
-            <p className="w-full text-center">Loading...</p>
+            <FormFieldLoading />
           ) : (
             <Controller
               name="market"

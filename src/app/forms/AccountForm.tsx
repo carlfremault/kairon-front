@@ -1,8 +1,10 @@
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import Select from "react-select";
-import { Field, Fieldset, Input } from "@headlessui/react";
+import { Field, Fieldset } from "@headlessui/react";
 import FormFeedback from "../components/form/FormFeedback";
+import FormFieldLoading from "../components/form/FormFieldLoading";
 import FormSubmitButton from "../components/form/FormSubmitButton";
+import FormTextInput from "../components/form/FormTextInput";
 import useExchangeOptions from "../hooks/useExchangeOptions";
 import useSubmit from "../hooks/useSubmit";
 
@@ -52,18 +54,17 @@ const AccountForm = ({ setShowModal }: AccountFormProps) => {
     <form onSubmit={handleSubmit(onSubmit)}>
       <Fieldset className="mb-6 space-y-6">
         <Field>
-          <Input
-            className="w-full border border-dark-grey bg-light-grey p-2 text-black placeholder:text-slate-400"
+          <FormTextInput
+            register={register}
+            name="accountName"
             placeholder="account name"
-            {...register("accountName", { required: true, minLength: 1 })}
+            errors={errors}
+            errorMessage="Account name is required!"
           />
-          {errors.accountName && (
-            <FormFeedback>Account name is required!</FormFeedback>
-          )}
         </Field>
         <Field>
           {isPending ? (
-            <p className="w-full text-center">Loading...</p>
+            <FormFieldLoading />
           ) : (
             <Controller
               name="exchange"
@@ -95,25 +96,23 @@ const AccountForm = ({ setShowModal }: AccountFormProps) => {
           )}
         </Field>
         <Field>
-          <Input
-            className="w-full border border-dark-grey bg-light-grey p-2 text-black placeholder:text-slate-400"
-            placeholder="private key"
+          <FormTextInput
+            register={register}
+            name="privateKey"
             type="password"
-            {...register("privateKey", { required: true, minLength: 1 })}
+            placeholder="private key"
+            errors={errors}
+            errorMessage="Private key is required!"
           />
-          {errors.privateKey && (
-            <FormFeedback>Private key is required!</FormFeedback>
-          )}
         </Field>
         <Field>
-          <Input
-            className="w-full border border-dark-grey bg-light-grey p-2 text-black placeholder:text-slate-400"
+          <FormTextInput
+            register={register}
+            name="publicKey"
             placeholder="public key"
-            {...register("publicKey", { required: true, minLength: 1 })}
+            errors={errors}
+            errorMessage="Public key is required!"
           />
-          {errors.publicKey && (
-            <FormFeedback>Public key is required!</FormFeedback>
-          )}
         </Field>
       </Fieldset>
       <FormSubmitButton disabled={isPending} />
