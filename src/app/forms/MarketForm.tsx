@@ -1,11 +1,11 @@
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Select from "react-select";
 import { Field, Fieldset } from "@headlessui/react";
 import FormFeedback from "../components/form/FormFeedback";
 import FormSubmitButton from "../components/form/FormSubmitButton";
 import useAccountOptions from "../hooks/useAccountOptions";
 import useMarketOptions from "../hooks/useMarketOptions";
+import useSubmit from "../hooks/useSubmit";
 
 interface MarketFormProps {
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -36,24 +36,18 @@ const MarketForm = ({ setShowModal }: MarketFormProps) => {
     selectedAccount?.id,
   );
 
-  const queryClient = useQueryClient();
-  const mutation = useMutation({
-    mutationFn: (data: MarketFormInputs) => {
-      const body = {
-        account_id: data.account.id,
-        market_name: data.market.value,
-      };
+  const formatData = (data: MarketFormInputs) => {
+    return {
+      account_id: data.account.id,
+      market_name: data.market.value,
+    };
+  };
 
-      return fetch(process.env.NEXT_PUBLIC_KAIRON_API_URL + "/markets", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["markets"] });
-      setShowModal(false);
-    },
+  const mutation = useSubmit<MarketFormInputs>({
+    endpoint: process.env.NEXT_PUBLIC_KAIRON_API_URL + "/markets",
+    queryKey: "markets",
+    formatData,
+    onSuccess: () => setShowModal(false),
   });
 
   const onSubmit: SubmitHandler<MarketFormInputs> = (data, event) => {

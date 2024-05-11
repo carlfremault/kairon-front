@@ -1,10 +1,10 @@
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Select from "react-select";
 import { Field, Fieldset, Input } from "@headlessui/react";
 import FormFeedback from "../components/form/FormFeedback";
 import FormSubmitButton from "../components/form/FormSubmitButton";
 import useExchangeOptions from "../hooks/useExchangeOptions";
+import useSubmit from "../hooks/useSubmit";
 
 interface AccountFormProps {
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -27,26 +27,20 @@ const AccountForm = ({ setShowModal }: AccountFormProps) => {
 
   const { exchangeOptions, isPending } = useExchangeOptions();
 
-  const queryClient = useQueryClient();
-  const mutation = useMutation({
-    mutationFn: (data: AccountFormInputs) => {
-      const body = {
-        account_name: data.accountName,
-        exchange_name: data.exchange.value,
-        private_key: data.privateKey,
-        public_key: data.publicKey,
-      };
+  const formatData = (data: AccountFormInputs) => {
+    return {
+      account_name: data.accountName,
+      exchange_name: data.exchange.value,
+      private_key: data.privateKey,
+      public_key: data.publicKey,
+    };
+  };
 
-      return fetch(process.env.NEXT_PUBLIC_KAIRON_API_URL + "/accounts", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["accounts"] });
-      setShowModal(false);
-    },
+  const mutation = useSubmit<AccountFormInputs>({
+    endpoint: process.env.NEXT_PUBLIC_KAIRON_API_URL + "/accounts",
+    queryKey: "accounts",
+    formatData,
+    onSuccess: () => setShowModal(false),
   });
 
   const onSubmit: SubmitHandler<AccountFormInputs> = (data, event) => {
