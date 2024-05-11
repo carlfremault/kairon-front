@@ -1,30 +1,22 @@
-"use client";
-
-import { useState } from "react";
-import DashboardSectionHeader from "./utils/DashboardSectionHeader";
-import MarketForm from "../forms/MarketForm";
-import DashboardModal from "./utils/DashboardModal";
+import ClientMarketSection from "./ClientMarketsSection";
 import MarketsTable from "./MarketsTable";
 
-const MarketsSection = () => {
-  const [showModal, setShowModal] = useState(false);
+const MarketsSection = async () => {
+  const fetchMarketsData = async () => {
+    "use server";
+    return fetch(process.env.NEXT_PUBLIC_KAIRON_API_URL + "/markets").then(
+      (res) => res.json(),
+    );
+  };
+  const initialMarketsData = await fetchMarketsData();
 
   return (
-    <section className="w-full flex-initial md:w-7/12">
-      <DashboardSectionHeader
-        title="Markets"
-        buttonText="add market"
-        onClick={() => setShowModal(true)}
+    <ClientMarketSection>
+      <MarketsTable
+        initialData={initialMarketsData}
+        fetchData={fetchMarketsData}
       />
-      <MarketsTable />
-      <DashboardModal
-        showModal={showModal}
-        setShowModal={setShowModal}
-        dialogTitle="Add a market"
-      >
-        <MarketForm setShowModal={setShowModal} />
-      </DashboardModal>
-    </section>
+    </ClientMarketSection>
   );
 };
 
