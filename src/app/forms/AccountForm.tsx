@@ -104,6 +104,7 @@ const AccountForm = ({ setShowModal }: AccountFormProps) => {
           <Input
             className="w-full border border-dark-grey bg-light-grey p-2 text-black placeholder:text-slate-400"
             placeholder="private key"
+            type="password"
             {...register("privateKey", { required: true, minLength: 1 })}
           />
           {errors.privateKey && (
