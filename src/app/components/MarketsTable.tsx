@@ -1,6 +1,8 @@
+"use client";
+
+import { useQuery } from "@tanstack/react-query";
 import { createColumnHelper } from "@tanstack/react-table";
 import Table from "./table/Table";
-import { useQuery } from "@tanstack/react-query";
 import DashboardStatusMessage from "./utils/DashboardStatusMessage";
 
 type MarketsTableData = {
@@ -26,16 +28,18 @@ const columns = [
   }),
 ];
 
-const MarketsTable = () => {
-  const { isPending, error, data } = useQuery({
+const MarketsTable = ({
+  initialData,
+  fetchData,
+}: {
+  initialData: MarketsTableData[];
+  fetchData: () => Promise<MarketsTableData[]>;
+}) => {
+  const { error, data, isFetching } = useQuery({
     queryKey: ["markets"],
-    queryFn: () =>
-      fetch(process.env.NEXT_PUBLIC_KAIRON_API_URL + "/markets").then((res) =>
-        res.json(),
-      ),
+    queryFn: () => fetchData(),
+    initialData,
   });
-
-  if (isPending) return <DashboardStatusMessage statusText="Loading..." />;
 
   if (error)
     return (
@@ -44,7 +48,7 @@ const MarketsTable = () => {
       />
     );
 
-  return <Table data={data} columns={columns} />;
+  return <Table data={data} columns={columns} isFetching={isFetching} />;
 };
 
 export default MarketsTable;

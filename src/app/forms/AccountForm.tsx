@@ -1,10 +1,11 @@
-import { useForm, Controller, SubmitHandler } from "react-hook-form";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import Select from "react-select";
-import { Field, Fieldset, Input } from "@headlessui/react";
-import FormFeedback from "../components/form/FormFeedback";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { Field, Fieldset } from "@headlessui/react";
+import FormFieldLoading from "../components/form/FormFieldLoading";
+import FormSelect from "../components/form/FormSelect";
 import FormSubmitButton from "../components/form/FormSubmitButton";
+import FormTextInput from "../components/form/FormTextInput";
 import useExchangeOptions from "../hooks/useExchangeOptions";
+import useSubmit from "../hooks/useSubmit";
 
 interface AccountFormProps {
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -27,26 +28,20 @@ const AccountForm = ({ setShowModal }: AccountFormProps) => {
 
   const { exchangeOptions, isPending } = useExchangeOptions();
 
-  const queryClient = useQueryClient();
-  const mutation = useMutation({
-    mutationFn: (data: AccountFormInputs) => {
-      const body = {
-        account_name: data.accountName,
-        exchange_name: data.exchange.value,
-        private_key: data.privateKey,
-        public_key: data.publicKey,
-      };
+  const formatData = (data: AccountFormInputs) => {
+    return {
+      account_name: data.accountName,
+      exchange_name: data.exchange.value,
+      private_key: data.privateKey,
+      public_key: data.publicKey,
+    };
+  };
 
-      return fetch(process.env.NEXT_PUBLIC_KAIRON_API_URL + "/accounts", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["accounts"] });
-      setShowModal(false);
-    },
+  const mutation = useSubmit<AccountFormInputs>({
+    endpoint: process.env.NEXT_PUBLIC_KAIRON_API_URL + "/accounts",
+    queryKey: "accounts",
+    formatData,
+    onSuccess: () => setShowModal(false),
   });
 
   const onSubmit: SubmitHandler<AccountFormInputs> = (data, event) => {
@@ -58,67 +53,50 @@ const AccountForm = ({ setShowModal }: AccountFormProps) => {
     <form onSubmit={handleSubmit(onSubmit)}>
       <Fieldset className="mb-6 space-y-6">
         <Field>
-          <Input
-            className="w-full border border-dark-grey bg-light-grey p-2 text-black placeholder:text-slate-400"
+          <FormTextInput
+            register={register}
+            name="accountName"
             placeholder="account name"
-            {...register("accountName", { required: true, minLength: 1 })}
+            rules={{ required: true, minLength: 1 }}
+            errors={errors}
+            errorMessage="Account name is required!"
           />
-          {errors.accountName && (
-            <FormFeedback>Account name is required!</FormFeedback>
-          )}
         </Field>
         <Field>
           {isPending ? (
-            <p className="w-full text-center">Loading...</p>
+            <FormFieldLoading />
           ) : (
-            <Controller
-              name="exchange"
+            <FormSelect
               control={control}
+              name="exchange"
+              placeholder="pick an exchange ..."
+              options={exchangeOptions}
               rules={{ required: true }}
-              render={({ field }) => (
-                <Select
-                  options={exchangeOptions}
-                  placeholder="pick an exchange ..."
-                  unstyled
-                  classNames={{
-                    container: () => "border border-dark-grey",
-                    control: () => "bg-light-grey text-black pl-2 ",
-                    placeholder: () => "text-slate-400",
-                    menu: () =>
-                      "bg-light-grey text-black border border-dark-grey space-y-4 absolute left-0",
-                    noOptionsMessage: () => "py-4",
-                    option: () => "p-2 hover:bg-dark-grey",
-                    indicatorsContainer: () =>
-                      "bg-dark-grey text-dark-grey w-14",
-                  }}
-                  {...field}
-                />
-              )}
+              errors={errors}
+              errorMessage="Exchange is required!"
             />
           )}
-          {errors.exchange && (
-            <FormFeedback>Exchange is required!</FormFeedback>
-          )}
         </Field>
         <Field>
-          <Input
-            className="w-full border border-dark-grey bg-light-grey p-2 text-black placeholder:text-slate-400"
+          <FormTextInput
+            register={register}
+            name="privateKey"
+            type="password"
             placeholder="private key"
-            {...register("privateKey", { required: true, minLength: 1 })}
+            rules={{ required: true, minLength: 1 }}
+            errors={errors}
+            errorMessage="Private key is required!"
           />
-          {errors.privateKey && (
-            <FormFeedback>Private key is required!</FormFeedback>
-          )}
         </Field>
         <Field>
-          <Input
-            className="w-full border border-dark-grey bg-light-grey p-2 text-black placeholder:text-slate-400"
+          <FormTextInput
+            register={register}
+            name="publicKey"
             placeholder="public key"
-            {...register("publicKey", { required: true, minLength: 1 })}
+            rules={{ required: true, minLength: 1 }}
+            errors={errors}
+            errorMessage="Public key is required!"
           />
-          {errors.publicKey && (
-            <FormFeedback>Public key is required!</FormFeedback>
-          )}
         </Field>
       </Fieldset>
       <FormSubmitButton disabled={isPending} />
